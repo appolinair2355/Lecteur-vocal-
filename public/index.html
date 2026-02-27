@@ -3,47 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Web Lecture Vocal par Sossou Kouamé Appolinaire - Lecture de documents avec voix africaines">
-    <meta name="author" content="Sossou Kouamé Appolinaire">
-    <title>Web Lecture Vocal - Sossou Kouamé Appolinaire</title>
-    
-    <!-- Tailwind CSS -->
+    <title>Web Lecture Vocal Multilingue - Sossou Kouamé Appolinaire</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- PDF.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    
-    <!-- Mammoth.js pour Word -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-    
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #581c87 100%);
+            background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%);
             min-height: 100vh;
         }
         
         .glass-panel {
             background: rgba(255, 255, 255, 0.97);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .voice-slider {
             -webkit-appearance: none;
             appearance: none;
-            height: 8px;
-            background: linear-gradient(to right, #fbbf24 0%, #f59e0b 25%, #92400e 50%, #78350f 75%, #451a03 100%);
+            height: 10px;
+            background: linear-gradient(to right, #fbbf24, #f59e0b, #ea580c, #dc2626, #7c2d12);
             border-radius: 5px;
-            outline: none;
         }
         
         .voice-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            appearance: none;
             width: 28px;
             height: 28px;
             background: white;
@@ -51,96 +38,60 @@
             border-radius: 50%;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: transform 0.2s;
-        }
-        
-        .voice-slider::-webkit-slider-thumb:hover {
-            transform: scale(1.3);
         }
         
         .control-btn {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
         }
         
         .control-btn:hover {
             transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
         }
         
         .control-btn:active {
             transform: translateY(0) scale(0.95);
         }
         
-        .wave-animation {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            height: 40px;
-        }
-        
         .wave-bar {
             width: 6px;
-            background: linear-gradient(to top, #fbbf24, #d97706, #92400e);
+            background: linear-gradient(to top, #fbbf24, #d97706);
             border-radius: 3px;
             animation: wave 0.8s ease-in-out infinite;
         }
-        
-        .wave-bar:nth-child(1) { animation-delay: 0s; height: 20%; }
-        .wave-bar:nth-child(2) { animation-delay: 0.1s; height: 40%; }
-        .wave-bar:nth-child(3) { animation-delay: 0.2s; height: 70%; }
-        .wave-bar:nth-child(4) { animation-delay: 0.3s; height: 50%; }
-        .wave-bar:nth-child(5) { animation-delay: 0.4s; height: 30%; }
-        .wave-bar:nth-child(6) { animation-delay: 0.5s; height: 60%; }
-        .wave-bar:nth-child(7) { animation-delay: 0.6s; height: 40%; }
         
         @keyframes wave {
             0%, 100% { transform: scaleY(0.5); }
             50% { transform: scaleY(1); }
         }
         
-        .playing .wave-bar {
-            animation-play-state: running;
-        }
-        
-        .paused .wave-bar {
-            animation-play-state: paused;
-        }
+        .playing .wave-bar { animation-play-state: running; }
+        .paused .wave-bar { animation-play-state: paused; }
         
         .drop-zone {
             border: 3px dashed #d97706;
-            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            background: linear-gradient(135deg, #fffbeb, #fef3c7);
             transition: all 0.3s;
         }
         
         .drop-zone.drag-over {
             border-color: #92400e;
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            background: #fde68a;
             transform: scale(1.02);
-            box-shadow: 0 20px 40px rgba(217, 119, 6, 0.3);
         }
         
-        /* Surlignage en temps réel */
         .word-span {
-            transition: all 0.15s ease;
-            padding: 2px 1px;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        
-        .word-span:hover {
-            background-color: #fef3c7;
+            transition: all 0.1s ease;
+            padding: 2px 2px;
+            border-radius: 4px;
         }
         
         .word-current {
             background: linear-gradient(120deg, #fbbf24 0%, #f59e0b 100%);
             color: #451a03;
-            font-weight: 700;
-            padding: 2px 4px;
-            border-radius: 4px;
-            box-shadow: 0 2px 8px rgba(251, 191, 36, 0.6);
-            transform: scale(1.1);
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.6);
+            transform: scale(1.15);
             display: inline-block;
-            text-shadow: 0 1px 2px rgba(255,255,255,0.5);
         }
         
         .word-read {
@@ -148,7 +99,11 @@
             color: #92400e;
         }
         
-        /* Scrollbar personnalisée */
+        .lang-flag {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+        
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -162,248 +117,254 @@
             background: linear-gradient(to bottom, #d97706, #92400e);
             border-radius: 5px;
         }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(to bottom, #b45309, #78350f);
-        }
-        
-        /* Badge voix africaine */
-        .african-badge {
-            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
-            color: #451a03;
-            font-weight: bold;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            box-shadow: 0 2px 8px rgba(217, 119, 6, 0.3);
-        }
-        
-        /* Indicateur de phrase */
-        .sentence-indicator {
-            position: absolute;
-            left: -20px;
-            width: 4px;
-            height: 100%;
-            background: #fbbf24;
-            border-radius: 2px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .sentence-active .sentence-indicator {
-            opacity: 1;
-        }
     </style>
 </head>
 <body class="p-4 md:p-8">
-    <div class="max-w-5xl mx-auto">
+    <div class="max-w-6xl mx-auto">
         <!-- Header -->
         <div class="text-center mb-8 text-white">
             <div class="flex justify-center items-center gap-3 mb-2">
-                <span class="african-badge">🇧🇯 🇨🇮 Voix Africaine</span>
+                <span class="bg-amber-500 text-amber-950 px-4 py-2 rounded-full font-bold text-sm">
+                    🌍 10 LANGUES AFRICAINES & INTERNATIONALES
+                </span>
             </div>
-            <h1 class="text-4xl md:text-6xl font-bold mb-2 tracking-tight drop-shadow-lg">Web Lecture Vocal</h1>
-            <p class="text-xl opacity-90 font-light">Par Sossou Kouamé Appolinaire</p>
-            <p class="text-sm mt-2 opacity-75">Version Africaine • Bénin • Côte d'Ivoire</p>
+            <h1 class="text-4xl md:text-6xl font-bold mb-2">Web Lecture Vocal</h1>
+            <p class="text-xl opacity-90">Par Sossou Kouamé Appolinaire</p>
+            <p class="text-sm mt-2 opacity-75">🇧🇯 Bénin • 🇨🇮 Côte d'Ivoire • 🌍 Multilingue</p>
         </div>
 
         <!-- Main Panel -->
         <div class="glass-panel rounded-3xl shadow-2xl p-6 md:p-8 mb-6">
             
-            <!-- File Upload Zone -->
+            <!-- File Upload -->
             <div id="dropZone" class="drop-zone rounded-2xl p-8 text-center mb-8 cursor-pointer">
                 <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt" class="hidden">
                 <div class="text-6xl mb-4">📚</div>
-                <p class="text-xl font-bold text-amber-900 mb-2">Déposez votre document ici</p>
+                <p class="text-xl font-bold text-amber-900 mb-2">Déposez votre document</p>
                 <p class="text-amber-700">PDF, Word (.doc, .docx) ou TXT</p>
                 <p id="fileName" class="mt-3 text-amber-600 font-bold hidden"></p>
             </div>
 
-            <!-- Voice Selection Africaine -->
-            <div class="mb-8 bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 border-2 border-amber-200">
+            <!-- Language Selection - 10 LANGUES -->
+            <div class="mb-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 border-2 border-amber-200">
+                <label class="text-sm font-bold text-amber-900 uppercase tracking-wider mb-3 block">
+                    🌐 Choisissez votre Langue (10 disponibles)
+                </label>
+                
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                    <button class="lang-btn bg-white border-2 border-amber-300 rounded-xl p-3 hover:bg-amber-100 transition-all text-left focus:ring-4 focus:ring-amber-400 active" data-lang="fr-FR" data-name="Français" data-flag="🇫🇷">
+                        <span class="lang-flag">🇫🇷</span>
+                        <div class="font-bold text-amber-900">Français</div>
+                        <div class="text-xs text-amber-700">France/Afrique</div>
+                    </button>
+                    
+                    <button class="lang-btn bg-white border-2 border-amber-300 rounded-xl p-3 hover:bg-amber-100 transition-all text-left focus:ring-4 focus:ring-amber-400" data-lang="en-US" data-name="English" data-flag="🇬🇧">
+                        <span class="lang-flag">🇬🇧</span>
+                        <div class="font-bold text-amber-900">English</div>
+                        <div class="text-xs text-amber-700">US/UK</div>
+                    </button>
+                    
+                    <button class="lang-btn bg-white border-2 border-amber-300 rounded-xl p-3 hover:bg-amber-100 transition-all text-left focus:ring-4 focus:ring-amber-400" data-lang="es-ES" data-name="Español" data-flag="🇪🇸">
+                        <span class="lang-flag">🇪🇸</span>
+                        <div class="font-bold text-amber-900">Español</div>
+                        <div class="text-xs text-amber-700">Espagne</div>
+                    </button>
+                    
+                    <button class="lang-btn bg-white border-2 border-amber-300 rounded-xl p-3 hover:bg-amber-100 transition-all text-left focus:ring-4 focus:ring-amber-400" data-lang="pt-PT" data-name="Português" data-flag="🇵🇹">
+                        <span class="lang-flag">🇵🇹</span>
+                        <div class="font-bold text-amber-900">Português</div>
+                        <div class="text-xs text-amber-700">Portugal/Brésil</div>
+                    </button>
+                    
+                    <button class="lang-btn bg-white border-2 border-amber-300 rounded-xl p-3 hover:bg-amber-100 transition-all text-left focus:ring-4 focus:ring-amber-400" data-lang="ar-SA" data-name="العربية" data-flag="🇸🇦">
+                        <span class="lang-flag">🇸🇦</span>
+                        <div class="font-bold text-amber-900">العربية</div>
+                        <div class="text-xs text-amber-700">Arabe</div>
+                    </button>
+                    
+                    <button class="lang-btn bg-white border-2 border-amber-300 rounded-xl p-3 hover:bg-amber-100 transition-all text-left focus:ring-4 focus:ring-amber-400" data-lang="sw-KE" data-name="Kiswahili" data-flag="🇰🇪">
+                        <span class="lang-flag">🇰🇪</span>
+                        <div class="font-bold text-amber-900">Kiswahili</div>
+                        <div class="text-xs text-amber-700">Afrique Est</div>
+                    </button>
+                    
+                    <button class="lang-btn bg-white border-2 border-amber-300 rounded-xl p-3 hover:bg-amber-100 transition-all text-left focus:ring-4 focus:ring-amber-400" data-lang="ha-NG" data-name="Hausa" data-flag="🇳🇬">
+                        <span class="lang-flag">🇳🇬</span>
+                        <div class="font-bold text-amber-900">Hausa</div>
+                        <div class="text-xs text-amber-700">Nigeria/Niger</div>
+                    </button>
+                    
+                    <button class="lang-btn bg-white border-2 border-amber-300 rounded-xl p-3 hover:bg-amber-100 transition-all text-left focus:ring-4 focus:ring-amber-400" data-lang="yo-NG" data-name="Yorùbá" data-flag="🇳🇬">
+                        <span class="lang-flag">🇳🇬</span>
+                        <div class="font-bold text-amber-900">Yorùbá</div>
+                        <div class="text-xs text-amber-700">Nigeria/Bénin</div>
+                    </button>
+                    
+                    <button class="lang-btn bg-white border-2 border-amber-300 rounded-xl p-3 hover:bg-amber-100 transition-all text-left focus:ring-4 focus:ring-amber-400" data-lang="ig-NG" data-name="Igbo" data-flag="🇳🇬">
+                        <span class="lang-flag">🇳🇬</span>
+                        <div class="font-bold text-amber-900">Igbo</div>
+                        <div class="text-xs text-amber-700">Nigeria</div>
+                    </button>
+                    
+                    <button class="lang-btn bg-white border-2 border-amber-300 rounded-xl p-3 hover:bg-amber-100 transition-all text-left focus:ring-4 focus:ring-amber-400" data-lang="zu-ZA" data-name="isiZulu" data-flag="🇿🇦">
+                        <span class="lang-flag">🇿🇦</span>
+                        <div class="font-bold text-amber-900">isiZulu</div>
+                        <div class="text-xs text-amber-700">Afrique Sud</div>
+                    </button>
+                </div>
+                
+                <div class="mt-4 p-3 bg-amber-100 rounded-lg border border-amber-300">
+                    <span class="text-amber-800 font-semibold">🎯 Langue sélectionnée : </span>
+                    <span id="selectedLangDisplay" class="text-amber-900 font-bold text-lg">🇫🇷 Français</span>
+                </div>
+            </div>
+
+            <!-- Voice Type -->
+            <div class="mb-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 border-2 border-green-200">
                 <div class="flex justify-between items-center mb-4">
-                    <div class="flex items-center gap-2">
-                        <span class="text-2xl">🎙️</span>
-                        <label class="text-sm font-bold text-amber-900 uppercase tracking-wider">Type de Voix Africaine</label>
-                    </div>
-                    <span id="voiceLabel" class="bg-amber-100 text-amber-800 px-4 py-2 rounded-full font-bold border-2 border-amber-300">
-                        Femme Béninoise
+                    <label class="text-sm font-bold text-green-900 uppercase tracking-wider">🎙️ Type de Voix</label>
+                    <span id="voiceLabel" class="bg-green-100 text-green-800 px-4 py-2 rounded-full font-bold border-2 border-green-300">
+                        Femme Africaine
                     </span>
                 </div>
                 
-                <div class="relative mb-4">
-                    <input type="range" id="voiceSlider" min="0" max="100" value="30" class="voice-slider w-full">
-                    <div class="flex justify-between text-xs text-amber-800 mt-3 font-bold">
-                        <span class="flex flex-col items-center gap-1">
-                            <span class="text-2xl">👶</span>
-                            <span>Enfant</span>
-                        </span>
-                        <span class="flex flex-col items-center gap-1">
-                            <span class="text-2xl">🧑‍🦱</span>
-                            <span>Jeune</span>
-                        </span>
-                        <span class="flex flex-col items-center gap-1">
-                            <span class="text-2xl">👩‍🦱</span>
-                            <span>Femme</span>
-                        </span>
-                        <span class="flex flex-col items-center gap-1">
-                            <span class="text-2xl">👨‍🦱</span>
-                            <span>Homme</span>
-                        </span>
-                        <span class="flex flex-col items-center gap-1">
-                            <span class="text-2xl">🧔🏾</span>
-                            <span>Aîné</span>
-                        </span>
-                    </div>
-                </div>
+                <input type="range" id="voiceSlider" min="0" max="100" value="40" class="voice-slider w-full mb-2">
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 pt-4 border-t-2 border-amber-200">
-                    <div class="flex items-center gap-2">
-                        <span class="text-amber-700 font-semibold">Langue:</span>
-                        <select id="langSelect" class="bg-white border-2 border-amber-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium text-amber-900">
-                            <option value="fr-FR">🇫🇷 Français (Afrique)</option>
-                            <option value="en-US">🇬🇧 English</option>
-                        </select>
-                    </div>
-                    
-                    <div class="flex items-center gap-2">
-                        <span class="text-amber-700 font-semibold">Style:</span>
-                        <select id="styleSelect" class="bg-white border-2 border-amber-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium text-amber-900">
-                            <option value="warm">🌞 Chaleureux</option>
-                            <option value="formal">📜 Formel</option>
-                            <option value="joyful">😊 Joyeux</option>
-                            <option value="calm">🍃 Posé</option>
-                        </select>
-                    </div>
-                    
-                    <div class="flex items-center gap-2">
-                        <span class="text-amber-700 font-semibold">Vitesse:</span>
-                        <input type="range" id="rateSlider" min="0.5" max="1.5" step="0.1" value="0.9" class="w-24 accent-amber-600">
-                        <span id="rateValue" class="text-sm font-mono font-bold text-amber-700">0.9x</span>
-                    </div>
+                <div class="flex justify-between text-xs font-bold text-green-800 mt-3">
+                    <span class="text-center">👶<br>Enfant</span>
+                    <span class="text-center">🧑‍🦱<br>Jeune</span>
+                    <span class="text-center">👩<br>Femme</span>
+                    <span class="text-center">👨<br>Homme</span>
+                    <span class="text-center">🧔<br>Aîné</span>
                 </div>
             </div>
 
-            <!-- Audio Visualizer -->
+            <!-- Style & Speed -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-blue-50 rounded-xl p-4 border-2 border-blue-200">
+                    <label class="text-sm font-bold text-blue-900 mb-2 block">🎭 Style de lecture</label>
+                    <select id="styleSelect" class="w-full bg-white border-2 border-blue-300 rounded-lg px-3 py-2 text-blue-900 font-semibold">
+                        <option value="natural">🌿 Naturel</option>
+                        <option value="warm" selected>🔥 Chaleureux</option>
+                        <option value="formal">📜 Formel</option>
+                        <option value="joyful">☀️ Joyeux</option>
+                        <option value="calm">🍃 Calme</option>
+                        <option value="story">📖 Conteur</option>
+                    </select>
+                </div>
+                
+                <div class="bg-purple-50 rounded-xl p-4 border-2 border-purple-200">
+                    <label class="text-sm font-bold text-purple-900 mb-2 block">⚡ Vitesse : <span id="rateValue" class="text-purple-700">0.9x</span></label>
+                    <input type="range" id="rateSlider" min="0.5" max="1.5" step="0.1" value="0.9" class="w-full accent-purple-600">
+                </div>
+            </div>
+
+            <!-- Visualizer -->
             <div class="flex justify-center mb-6">
-                <div id="visualizer" class="wave-animation paused opacity-30">
-                    <div class="wave-bar"></div>
-                    <div class="wave-bar"></div>
-                    <div class="wave-bar"></div>
-                    <div class="wave-bar"></div>
-                    <div class="wave-bar"></div>
-                    <div class="wave-bar"></div>
-                    <div class="wave-bar"></div>
+                <div id="visualizer" class="flex items-center gap-1 h-10 opacity-30 paused">
+                    <div class="wave-bar" style="height:20%;animation-delay:0s"></div>
+                    <div class="wave-bar" style="height:40%;animation-delay:0.1s"></div>
+                    <div class="wave-bar" style="height:60%;animation-delay:0.2s"></div>
+                    <div class="wave-bar" style="height:40%;animation-delay:0.3s"></div>
+                    <div class="wave-bar" style="height:20%;animation-delay:0.4s"></div>
                 </div>
             </div>
 
-            <!-- Control Buttons -->
+            <!-- Controls -->
             <div class="flex justify-center gap-4 mb-6">
-                <button id="playBtn" class="control-btn bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full p-5 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed" disabled title="Lecture">
-                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                    </svg>
+                <button id="playBtn" class="control-btn bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-full p-5 shadow-xl disabled:opacity-50" disabled>
+                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                 </button>
                 
-                <button id="pauseBtn" class="control-btn bg-gradient-to-r from-yellow-500 to-amber-600 text-white rounded-full p-5 shadow-xl hidden" title="Pause">
-                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-                    </svg>
+                <button id="pauseBtn" class="control-btn bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full p-5 shadow-xl hidden">
+                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                 </button>
                 
-                <button id="resumeBtn" class="control-btn bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-full p-5 shadow-xl hidden" title="Reprendre">
-                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                    </svg>
+                <button id="resumeBtn" class="control-btn bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full p-5 shadow-xl hidden">
+                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                 </button>
                 
-                <button id="stopBtn" class="control-btn bg-gradient-to-r from-red-500 to-rose-600 text-white rounded-full p-5 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed" disabled title="Stop">
-                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M6 6h12v12H6z"/>
-                    </svg>
+                <button id="stopBtn" class="control-btn bg-gradient-to-r from-red-500 to-rose-600 text-white rounded-full p-5 shadow-xl disabled:opacity-50" disabled>
+                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
                 </button>
             </div>
 
             <!-- Progress -->
-            <div class="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-4 border border-amber-200">
-                <div class="flex justify-between text-sm font-bold text-amber-800 mb-2">
-                    <span>Progression de lecture</span>
+            <div class="bg-gradient-to-r from-gray-50 to-slate-50 rounded-xl p-4 border-2 border-gray-200">
+                <div class="flex justify-between text-sm font-bold text-gray-700 mb-2">
+                    <span>Progression</span>
                     <span id="progressText">0%</span>
                 </div>
-                <div class="w-full bg-amber-200 rounded-full h-3 overflow-hidden">
-                    <div id="progressBar" class="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 h-full rounded-full transition-all duration-300 shadow-lg" style="width: 0%"></div>
+                <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                    <div id="progressBar" class="bg-gradient-to-r from-green-500 via-amber-500 to-red-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
                 </div>
-                <div class="flex justify-between mt-2 text-xs text-amber-700">
+                <div class="flex justify-between mt-2 text-xs text-gray-600 font-mono">
                     <span id="currentTime">00:00</span>
                     <span id="totalTime">00:00</span>
                 </div>
             </div>
         </div>
 
-        <!-- Text Preview avec Surlignage -->
+        <!-- Text Preview -->
         <div class="glass-panel rounded-3xl shadow-2xl p-6 md:p-8 border-2 border-amber-200">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-amber-900 flex items-center gap-2">
-                    <span>📖</span>
-                    <span>Texte avec suivi en temps réel</span>
-                </h3>
+                <h3 class="text-xl font-bold text-amber-900">📖 Texte avec suivi</h3>
                 <div class="flex gap-2 text-xs">
-                    <span class="bg-yellow-300 text-amber-900 px-2 py-1 rounded font-bold">En cours</span>
+                    <span class="bg-yellow-400 text-amber-900 px-2 py-1 rounded font-bold">En cours</span>
                     <span class="bg-amber-100 text-amber-800 px-2 py-1 rounded">Lu</span>
                 </div>
             </div>
             
-            <div id="textContainer" class="relative bg-white rounded-xl p-6 h-96 overflow-y-auto text-amber-950 text-lg leading-loose border-2 border-amber-200 shadow-inner font-medium">
+            <div id="textContainer" class="bg-white rounded-xl p-6 h-96 overflow-y-auto text-gray-900 text-lg leading-loose border-2 border-amber-200 shadow-inner">
                 <div id="textPreview" class="whitespace-pre-wrap">
-                    <div class="text-center text-amber-400 mt-20">
+                    <div class="text-center text-gray-400 mt-20">
                         <div class="text-6xl mb-4">📥</div>
-                        <p>Importez un document pour commencer la lecture...</p>
-                        <p class="text-sm mt-2">Les mots seront surlignés en jaune pendant la lecture</p>
+                        <p>Importez un document pour commencer...</p>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Info bulle -->
-            <div class="mt-4 flex items-center gap-2 text-sm text-amber-700 bg-amber-50 p-3 rounded-lg border border-amber-200">
-                <span>💡</span>
-                <span>Le mot en cours de lecture est surligné en <strong>jaune vif</strong> et les mots déjà lus apparaissent en <strong>orange clair</strong></span>
             </div>
         </div>
 
         <!-- Footer -->
         <div class="text-center mt-8 text-white/90 text-sm">
             <p class="text-lg font-semibold">© 2024 Sossou Kouamé Appolinaire</p>
-            <p class="mt-2 text-amber-200">🇧🇯 Bénin • 🇨🇮 Côte d'Ivoire • 🌍 Afrique de l'Ouest</p>
-            <p class="mt-1 text-xs opacity-70">Déployé sur Render.com • Port 10000</p>
+            <p class="mt-2">🌍 10 Langues • 🎙️ Voix Africaines • 📖 Lecture intelligente</p>
         </div>
     </div>
 
     <script>
-        // Configuration
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
         
-        // État global
+        // 10 LANGUES CONFIGURATION
+        const languages = {
+            'fr-FR': { name: 'Français', flag: '🇫🇷', voices: ['fr-FR', 'fr-CA'] },
+            'en-US': { name: 'English', flag: '🇬🇧', voices: ['en-US', 'en-GB', 'en-CA'] },
+            'es-ES': { name: 'Español', flag: '🇪🇸', voices: ['es-ES', 'es-MX', 'es-US'] },
+            'pt-PT': { name: 'Português', flag: '🇵🇹', voices: ['pt-PT', 'pt-BR'] },
+            'ar-SA': { name: 'العربية', flag: '🇸🇦', voices: ['ar-SA', 'ar-EG'] },
+            'sw-KE': { name: 'Kiswahili', flag: '🇰🇪', voices: ['sw-KE'] },
+            'ha-NG': { name: 'Hausa', flag: '🇳🇬', voices: ['ha-NG'] },
+            'yo-NG': { name: 'Yorùbá', flag: '🇳🇬', voices: ['yo-NG'] },
+            'ig-NG': { name: 'Igbo', flag: '🇳🇬', voices: ['ig-NG'] },
+            'zu-ZA': { name: 'isiZulu', flag: '🇿🇦', voices: ['zu-ZA'] }
+        };
+
+        let currentLang = 'fr-FR';
         let currentText = '';
         let words = [];
         let speechSynthesis = window.speechSynthesis;
-        let currentUtterance = null;
         let isPaused = false;
         let isPlaying = false;
         let currentWordIndex = 0;
         let wordElements = [];
-        let readWords = new Set();
 
-        // Éléments DOM
+        // DOM Elements
         const dropZone = document.getElementById('dropZone');
         const fileInput = document.getElementById('fileInput');
         const fileName = document.getElementById('fileName');
         const textPreview = document.getElementById('textPreview');
         const voiceSlider = document.getElementById('voiceSlider');
         const voiceLabel = document.getElementById('voiceLabel');
-        const langSelect = document.getElementById('langSelect');
-        const styleSelect = document.getElementById('styleSelect');
         const rateSlider = document.getElementById('rateSlider');
         const rateValue = document.getElementById('rateValue');
         const playBtn = document.getElementById('playBtn');
@@ -413,149 +374,121 @@
         const visualizer = document.getElementById('visualizer');
         const progressBar = document.getElementById('progressBar');
         const progressText = document.getElementById('progressText');
-        const currentTimeEl = document.getElementById('currentTime');
-        const totalTimeEl = document.getElementById('totalTime');
+        const selectedLangDisplay = document.getElementById('selectedLangDisplay');
 
-        // Configuration des voix africaines (simulation via pitch/rate)
-        const africanVoices = [
-            { label: '👶 Enfant Africain', pitch: 1.6, rate: 1.0, gender: 'child' },
-            { label: '🧑‍🦱 Jeune Béninois', pitch: 1.1, rate: 0.95, gender: 'young' },
-            { label: '👩‍🦱 Femme Béninoise', pitch: 1.0, rate: 0.9, gender: 'female' },
-            { label: '👩‍🦱 Femme Ivoirienne', pitch: 0.95, rate: 0.92, gender: 'female' },
-            { label: '👨‍🦱 Homme Ivoirien', pitch: 0.85, rate: 0.88, gender: 'male' },
-            { label: '🧔🏾 Aîné Africain', pitch: 0.7, rate: 0.8, gender: 'elder' }
+        // Voice types
+        const voiceTypes = [
+            { label: '👶 Enfant', pitch: 1.6, rate: 1.0 },
+            { label: '🧑‍🦱 Jeune', pitch: 1.1, rate: 0.95 },
+            { label: '👩 Femme', pitch: 1.0, rate: 0.9 },
+            { label: '👨 Homme', pitch: 0.85, rate: 0.88 },
+            { label: '🧔 Aîné', pitch: 0.7, rate: 0.8 }
         ];
 
-        // Styles de voix
-        const voiceStyles = {
-            warm: { rateMod: 1.0, pitchMod: 1.0 },
-            formal: { rateMod: 0.9, pitchMod: 1.0 },
-            joyful: { rateMod: 1.1, pitchMod: 1.1 },
-            calm: { rateMod: 0.85, pitchMod: 0.95 }
-        };
+        // Language selection
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.lang-btn').forEach(b => {
+                    b.classList.remove('ring-4', 'ring-amber-400', 'bg-amber-100');
+                    b.classList.add('bg-white');
+                });
+                btn.classList.remove('bg-white');
+                btn.classList.add('bg-amber-100', 'ring-4', 'ring-amber-400');
+                
+                currentLang = btn.dataset.lang;
+                selectedLangDisplay.textContent = `${btn.dataset.flag} ${btn.dataset.name}`;
+            });
+        });
 
-        // Événements
+        // Events
         dropZone.addEventListener('click', () => fileInput.click());
-        
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('drag-over');
-        });
-        
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.classList.remove('drag-over');
-        });
-        
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
             dropZone.classList.remove('drag-over');
-            const files = e.dataTransfer.files;
-            if (files.length) handleFile(files[0]);
+            if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
         });
-        
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length) handleFile(e.target.files[0]);
-        });
+        fileInput.addEventListener('change', (e) => { if (e.target.files.length) handleFile(e.target.files[0]); });
 
         voiceSlider.addEventListener('input', updateVoiceSettings);
-        rateSlider.addEventListener('input', (e) => {
-            rateValue.textContent = e.target.value + 'x';
-        });
+        rateSlider.addEventListener('input', (e) => { rateValue.textContent = e.target.value + 'x'; });
 
         playBtn.addEventListener('click', startReading);
         pauseBtn.addEventListener('click', pauseReading);
         resumeBtn.addEventListener('click', resumeReading);
         stopBtn.addEventListener('click', stopReading);
 
-        // Gestion des fichiers
+        function updateVoiceSettings() {
+            const value = parseInt(voiceSlider.value);
+            const index = Math.floor((value / 100) * (voiceTypes.length - 1));
+            voiceLabel.textContent = voiceTypes[index].label.replace(/👶|🧑‍🦱|👩|👨|🧔 /, '');
+        }
+
         async function handleFile(file) {
             fileName.textContent = '📄 ' + file.name;
             fileName.classList.remove('hidden');
             
-            const extension = file.name.split('.').pop().toLowerCase();
+            const ext = file.name.split('.').pop().toLowerCase();
             
             try {
-                if (extension === 'pdf') {
-                    await readPDF(file);
-                } else if (extension === 'doc' || extension === 'docx') {
-                    await readWord(file);
-                } else if (extension === 'txt') {
-                    await readTXT(file);
-                } else {
-                    alert('Format non supporté. Utilisez PDF, Word ou TXT.');
-                    return;
-                }
+                if (ext === 'pdf') await readPDF(file);
+                else if (ext === 'doc' || ext === 'docx') await readWord(file);
+                else if (ext === 'txt') await readTXT(file);
+                else { alert('Format non supporté'); return; }
                 
-                prepareTextForReading();
+                prepareText();
                 enableControls();
-                updateProgress(0);
-            } catch (error) {
-                console.error(error);
-                alert('Erreur lors de la lecture du fichier: ' + error.message);
+            } catch (err) {
+                alert('Erreur: ' + err.message);
             }
         }
 
         async function readPDF(file) {
-            const arrayBuffer = await file.arrayBuffer();
-            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            const buffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
             let text = '';
-            
             for (let i = 1; i <= pdf.numPages; i++) {
                 const page = await pdf.getPage(i);
                 const content = await page.getTextContent();
-                text += content.items.map(item => item.str).join(' ') + '\n';
+                text += content.items.map(item => item.str).join(' ') + ' ';
             }
-            
-            currentText = cleanText(text);
+            currentText = text.replace(/\s+/g, ' ').trim();
         }
 
         async function readWord(file) {
-            const arrayBuffer = await file.arrayBuffer();
-            const result = await mammoth.extractRawText({ arrayBuffer });
-            currentText = cleanText(result.value);
+            const buffer = await file.arrayBuffer();
+            const result = await mammoth.extractRawText({ arrayBuffer: buffer });
+            currentText = result.value.replace(/\s+/g, ' ').trim();
         }
 
         async function readTXT(file) {
-            const text = await file.text();
-            currentText = cleanText(text);
+            currentText = (await file.text()).replace(/\s+/g, ' ').trim();
         }
 
-        function cleanText(text) {
-            return text
-                .replace(/\s+/g, ' ')
-                .replace(/[\r\n]+/g, '\n')
-                .trim();
-        }
-
-        // Préparation du texte avec span pour chaque mot
-        function prepareTextForReading() {
-            // Diviser le texte en mots tout en conservant la ponctuation
-            words = currentText.match(/[\wÀ-ÿ]+|[^\w\s]|\s+/g) || [];
+        function prepareText() {
+            words = currentText.match(/[\wÀ-ÿ\u0600-\u06FF]+|[^\w\s]|\s+/g) || [];
             
-            // Créer le HTML avec des spans pour chaque mot
             let html = '';
             wordElements = [];
             
-            words.forEach((word, index) => {
+            words.forEach((word, i) => {
                 if (word.match(/^\s+$/)) {
                     html += word;
                 } else {
-                    const span = `<span class="word-span" data-index="${index}" id="word-${index}">${escapeHtml(word)}</span>`;
-                    html += span;
+                    html += `<span class="word-span" id="word-${i}">${escapeHtml(word)}</span>`;
                 }
             });
             
             textPreview.innerHTML = html;
             
-            // Stocker les références aux éléments
-            words.forEach((_, index) => {
-                const el = document.getElementById(`word-${index}`);
-                if (el) wordElements[index] = el;
+            words.forEach((_, i) => {
+                const el = document.getElementById(`word-${i}`);
+                if (el) wordElements[i] = el;
             });
             
-            // Calculer le temps estimé
-            const estimatedMinutes = Math.ceil(words.length / 130); // ~130 mots/minute
-            totalTimeEl.textContent = formatTime(estimatedMinutes * 60);
+            const mins = Math.ceil(words.length / 130);
+            document.getElementById('totalTime').textContent = formatTime(mins * 60);
         }
 
         function escapeHtml(text) {
@@ -564,177 +497,156 @@
             return div.innerHTML;
         }
 
-        // Configuration vocale
-        function updateVoiceSettings() {
-            const value = parseInt(voiceSlider.value);
-            const index = Math.floor((value / 100) * (africanVoices.length - 1));
-            const voice = africanVoices[index];
-            voiceLabel.textContent = voice.label.replace(/👶|🧑‍🦱|👩‍🦱|👨‍🦱|🧔🏾 /, '');
-        }
-
         function getVoiceConfig() {
             const value = parseInt(voiceSlider.value);
-            const index = Math.floor((value / 100) * (africanVoices.length - 1));
-            const voice = africanVoices[index];
-            const style = voiceStyles[styleSelect.value];
+            const index = Math.floor((value / 100) * (voiceTypes.length - 1));
+            const voice = voiceTypes[index];
+            const style = document.getElementById('styleSelect').value;
+            
+            const styleMods = {
+                natural: { p: 1, r: 1 },
+                warm: { p: 1.05, r: 0.95 },
+                formal: { p: 0.98, r: 0.9 },
+                joyful: { p: 1.1, r: 1.05 },
+                calm: { p: 0.95, r: 0.85 },
+                story: { p: 1.02, r: 0.88 }
+            };
+            
+            const mod = styleMods[style];
             
             return {
-                ...voice,
-                pitch: voice.pitch * style.pitchMod,
-                rate: voice.rate * style.rateMod * parseFloat(rateSlider.value)
+                pitch: voice.pitch * mod.p,
+                rate: voice.rate * mod.r * parseFloat(rateSlider.value)
             };
         }
 
-        // Lecture avec suivi mot par mot
         function startReading() {
-            if (!currentText || words.length === 0) return;
+            if (!currentText || !words.length) return;
             
             stopReading();
             isPlaying = true;
             isPaused = false;
             currentWordIndex = 0;
-            readWords.clear();
             
-            // Réinitialiser les styles
-            wordElements.forEach(el => {
-                if (el) {
-                    el.classList.remove('word-current', 'word-read');
-                }
-            });
+            wordElements.forEach(el => el?.classList.remove('word-current', 'word-read'));
             
             playBtn.classList.add('hidden');
             pauseBtn.classList.remove('hidden');
             resumeBtn.classList.add('hidden');
-            visualizer.classList.remove('paused');
+            visualizer.classList.remove('paused', 'opacity-30');
             visualizer.classList.add('playing');
-            visualizer.style.opacity = '1';
             
-            speakWords();
+            speakChunk();
         }
 
-        function speakWords() {
+        function speakChunk() {
             if (!isPlaying || currentWordIndex >= words.length) {
-                if (currentWordIndex >= words.length) {
-                    stopReading();
-                }
+                if (currentWordIndex >= words.length) stopReading();
                 return;
             }
             
-            // Regrouper les mots par phrases pour une lecture naturelle
-            const chunkSize = 8;
+            const chunkSize = 5;
             const chunk = words.slice(currentWordIndex, currentWordIndex + chunkSize).join('');
             const actualWords = words.slice(currentWordIndex, currentWordIndex + chunkSize);
             
             const utterance = new SpeechSynthesisUtterance(chunk);
-            const voiceConfig = getVoiceConfig();
+            const config = getVoiceConfig();
             
-            utterance.lang = langSelect.value;
-            utterance.pitch = voiceConfig.pitch;
-            utterance.rate = voiceConfig.rate;
+            utterance.lang = currentLang;
+            utterance.pitch = config.pitch;
+            utterance.rate = config.rate;
             
-            // Sélectionner une voix française chaude
-            const voices = speechSynthesis.getVoices();
-            const preferredVoice = voices.find(v => 
-                v.lang.includes('fr') && 
-                (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Enhanced'))
-            ) || voices.find(v => v.lang.includes('fr')) || voices[0];
+            // Find best voice
+            const availableVoices = speechSynthesis.getVoices();
+            const langPrefs = languages[currentLang].voices;
             
-            if (preferredVoice) utterance.voice = preferredVoice;
+            let selectedVoice = null;
+            for (let pref of langPrefs) {
+                selectedVoice = availableVoices.find(v => v.lang.startsWith(pref));
+                if (selectedVoice) break;
+            }
             
-            // Calculer la durée estimée pour chaque mot
-            const wordDuration = (chunk.length / voiceConfig.rate) * 80; // ms par caractère approximatif
+            if (!selectedVoice) {
+                selectedVoice = availableVoices.find(v => v.lang.startsWith(currentLang.split('-')[0]));
+            }
             
-            // Animer les mots pendant la lecture
-            let wordStartTime = 0;
-            const wordTimers = [];
+            if (selectedVoice) utterance.voice = selectedVoice;
+            
+            // Word highlighting timing
+            const charTime = (1000 / (config.rate * 5)); // ms per char approx
+            let charCount = 0;
+            const timers = [];
             
             actualWords.forEach((word, idx) => {
                 if (!word.match(/^\s+$/)) {
+                    const delay = charCount * charTime;
                     const timer = setTimeout(() => {
                         if (!isPlaying) return;
                         
-                        const globalIndex = currentWordIndex + idx;
+                        const globalIdx = currentWordIndex + idx;
                         
-                        // Retirer le surlignage précédent
-                        if (globalIndex > 0 && wordElements[globalIndex - 1]) {
-                            wordElements[globalIndex - 1].classList.remove('word-current');
-                            wordElements[globalIndex - 1].classList.add('word-read');
+                        if (globalIdx > 0 && wordElements[globalIdx - 1]) {
+                            wordElements[globalIdx - 1].classList.remove('word-current');
+                            wordElements[globalIdx - 1].classList.add('word-read');
                         }
                         
-                        // Surligner le mot actuel
-                        if (wordElements[globalIndex]) {
-                            wordElements[globalIndex].classList.add('word-current');
-                            wordElements[globalIndex].scrollIntoView({ 
-                                behavior: 'smooth', 
-                                block: 'center' 
-                            });
+                        if (wordElements[globalIdx]) {
+                            wordElements[globalIdx].classList.add('word-current');
+                            wordElements[globalIdx].scrollIntoView({ behavior: 'smooth', block: 'center' });
                         }
                         
-                        // Mettre à jour la progression
-                        updateProgress((globalIndex / words.length) * 100);
+                        updateProgress((globalIdx / words.length) * 100);
                         
-                    }, wordStartTime);
-                    
-                    wordTimers.push(timer);
+                    }, delay);
+                    timers.push(timer);
                 }
-                wordStartTime += (word.length + 1) * wordDuration;
+                charCount += word.length + 1;
             });
             
             utterance.onend = () => {
-                wordTimers.forEach(t => clearTimeout(t));
-                currentWordIndex += chunkSize;
+                timers.forEach(t => clearTimeout(t));
                 
-                // Marquer les mots lus
-                for (let i = currentWordIndex - chunkSize; i < currentWordIndex && i < words.length; i++) {
+                for (let i = currentWordIndex; i < currentWordIndex + chunkSize && i < words.length; i++) {
                     if (wordElements[i]) {
                         wordElements[i].classList.remove('word-current');
                         wordElements[i].classList.add('word-read');
                     }
                 }
                 
+                currentWordIndex += chunkSize;
+                
                 if (isPlaying && !isPaused) {
-                    speakWords();
+                    setTimeout(speakChunk, 50);
                 }
             };
             
             utterance.onerror = (e) => {
-                if (e.error !== 'canceled' && e.error !== 'interrupted') {
-                    console.error('Speech error:', e);
-                }
-                wordTimers.forEach(t => clearTimeout(t));
+                if (e.error !== 'canceled') console.error(e);
+                timers.forEach(t => clearTimeout(t));
             };
             
-            currentUtterance = utterance;
             speechSynthesis.speak(utterance);
-            
-            // Mettre à jour le temps
             updateTime();
         }
 
         function updateTime() {
             if (!isPlaying) return;
-            
-            const elapsed = Math.floor((currentWordIndex / words.length) * parseTime(totalTimeEl.textContent));
-            currentTimeEl.textContent = formatTime(elapsed);
-            
-            if (isPlaying) {
-                setTimeout(updateTime, 1000);
-            }
+            const elapsed = Math.floor((currentWordIndex / words.length) * parseTime(document.getElementById('totalTime').textContent));
+            document.getElementById('currentTime').textContent = formatTime(elapsed);
+            if (isPlaying) setTimeout(updateTime, 1000);
         }
 
-        function parseTime(timeStr) {
-            const [min, sec] = timeStr.split(':').map(Number);
-            return min * 60 + sec;
+        function parseTime(str) {
+            const [m, s] = str.split(':').map(Number);
+            return m * 60 + s;
         }
 
-        function formatTime(seconds) {
-            const min = Math.floor(seconds / 60);
-            const sec = seconds % 60;
-            return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+        function formatTime(sec) {
+            return `${Math.floor(sec / 60).toString().padStart(2, '0')}:${(sec % 60).toString().padStart(2, '0')}`;
         }
 
         function pauseReading() {
-            if (speechSynthesis.speaking && !isPaused) {
+            if (!isPaused) {
                 speechSynthesis.pause();
                 isPaused = true;
                 pauseBtn.classList.add('hidden');
@@ -765,19 +677,12 @@
             playBtn.classList.remove('hidden');
             pauseBtn.classList.add('hidden');
             resumeBtn.classList.add('hidden');
-            visualizer.classList.add('paused');
+            visualizer.classList.add('paused', 'opacity-30');
             visualizer.classList.remove('playing');
-            visualizer.style.opacity = '0.3';
             
-            // Réinitialiser les surlignages
-            wordElements.forEach(el => {
-                if (el) {
-                    el.classList.remove('word-current', 'word-read');
-                }
-            });
-            
+            wordElements.forEach(el => el?.classList.remove('word-current', 'word-read'));
             updateProgress(0);
-            currentTimeEl.textContent = '00:00';
+            document.getElementById('currentTime').textContent = '00:00';
         }
 
         function enableControls() {
@@ -785,23 +690,19 @@
             stopBtn.disabled = false;
         }
 
-        function updateProgress(percent) {
-            progressBar.style.width = percent + '%';
-            progressText.textContent = Math.round(percent) + '%';
+        function updateProgress(pct) {
+            progressBar.style.width = pct + '%';
+            progressText.textContent = Math.round(pct) + '%';
         }
 
-        // Initialisation
-        if (speechSynthesis.onvoiceschanged !== undefined) {
-            speechSynthesis.onvoiceschanged = () => {
-                speechSynthesis.getVoices();
-            };
+        // Init
+        if (speechSynthesis.onvoiceschanged) {
+            speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
         }
-        
         speechSynthesis.getVoices();
         updateVoiceSettings();
         
-        console.log('🎤 Web Lecture Vocal Africain - Sossou Kouamé Appolinaire');
-        console.log('🇧🇯 🇨🇮 Prêt avec voix chaleureuses d\'Afrique de l\'Ouest');
+        console.log('🌍 Web Lecture Vocal Multilingue - 10 langues actives');
     </script>
 </body>
 </html>
