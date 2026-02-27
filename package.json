@@ -1,0 +1,25 @@
+{
+  "name": "web-lecture-vocal-sossou",
+  "version": "1.0.0",
+  "description": "Web Lecture Vocal par Sossou Kouamé Appolinaire - Lecture de documents PDF/Word en audio",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "keywords": [
+    "text-to-speech",
+    "pdf-reader",
+    "vocal-synthesis",
+    "accessibility"
+  ],
+  "author": "Sossou Kouamé Appolinaire",
+  "license": "MIT"
+}
+
