@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Web Lecture Vocal par Sossou Kouamé Appolinaire - Convertissez vos documents PDF et Word en audio">
+    <meta name="description" content="Web Lecture Vocal par Sossou Kouamé Appolinaire - Lecture de documents avec voix africaines">
     <meta name="author" content="Sossou Kouamé Appolinaire">
     <title>Web Lecture Vocal - Sossou Kouamé Appolinaire</title>
     
@@ -22,12 +22,12 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #581c87 100%);
             min-height: 100vh;
         }
         
         .glass-panel {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.97);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
@@ -36,7 +36,7 @@
             -webkit-appearance: none;
             appearance: none;
             height: 8px;
-            background: linear-gradient(to right, #f472b6 0%, #60a5fa 50%, #34d399 100%);
+            background: linear-gradient(to right, #fbbf24 0%, #f59e0b 25%, #92400e 50%, #78350f 75%, #451a03 100%);
             border-radius: 5px;
             outline: none;
         }
@@ -44,18 +44,18 @@
         .voice-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             background: white;
-            border: 3px solid #667eea;
+            border: 4px solid #d97706;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             transition: transform 0.2s;
         }
         
         .voice-slider::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
+            transform: scale(1.3);
         }
         
         .control-btn {
@@ -63,33 +63,35 @@
         }
         
         .control-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
         }
         
         .control-btn:active {
-            transform: translateY(0);
+            transform: translateY(0) scale(0.95);
         }
         
         .wave-animation {
             display: flex;
             align-items: center;
-            gap: 3px;
-            height: 30px;
+            gap: 4px;
+            height: 40px;
         }
         
         .wave-bar {
-            width: 4px;
-            background: linear-gradient(to top, #667eea, #764ba2);
-            border-radius: 2px;
-            animation: wave 1s ease-in-out infinite;
+            width: 6px;
+            background: linear-gradient(to top, #fbbf24, #d97706, #92400e);
+            border-radius: 3px;
+            animation: wave 0.8s ease-in-out infinite;
         }
         
         .wave-bar:nth-child(1) { animation-delay: 0s; height: 20%; }
         .wave-bar:nth-child(2) { animation-delay: 0.1s; height: 40%; }
-        .wave-bar:nth-child(3) { animation-delay: 0.2s; height: 60%; }
-        .wave-bar:nth-child(4) { animation-delay: 0.3s; height: 40%; }
-        .wave-bar:nth-child(5) { animation-delay: 0.4s; height: 20%; }
+        .wave-bar:nth-child(3) { animation-delay: 0.2s; height: 70%; }
+        .wave-bar:nth-child(4) { animation-delay: 0.3s; height: 50%; }
+        .wave-bar:nth-child(5) { animation-delay: 0.4s; height: 30%; }
+        .wave-bar:nth-child(6) { animation-delay: 0.5s; height: 60%; }
+        .wave-bar:nth-child(7) { animation-delay: 0.6s; height: 40%; }
         
         @keyframes wave {
             0%, 100% { transform: scaleY(0.5); }
@@ -105,90 +107,181 @@
         }
         
         .drop-zone {
-            border: 3px dashed #cbd5e1;
+            border: 3px dashed #d97706;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
             transition: all 0.3s;
         }
         
         .drop-zone.drag-over {
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.1);
+            border-color: #92400e;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
             transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(217, 119, 6, 0.3);
+        }
+        
+        /* Surlignage en temps réel */
+        .word-span {
+            transition: all 0.15s ease;
+            padding: 2px 1px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .word-span:hover {
+            background-color: #fef3c7;
+        }
+        
+        .word-current {
+            background: linear-gradient(120deg, #fbbf24 0%, #f59e0b 100%);
+            color: #451a03;
+            font-weight: 700;
+            padding: 2px 4px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(251, 191, 36, 0.6);
+            transform: scale(1.1);
+            display: inline-block;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+        }
+        
+        .word-read {
+            background-color: #fef3c7;
+            color: #92400e;
         }
         
         /* Scrollbar personnalisée */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 10px;
         }
         
         ::-webkit-scrollbar-track {
             background: #f1f1f1;
-            border-radius: 4px;
+            border-radius: 5px;
         }
         
         ::-webkit-scrollbar-thumb {
-            background: #667eea;
-            border-radius: 4px;
+            background: linear-gradient(to bottom, #d97706, #92400e);
+            border-radius: 5px;
         }
         
         ::-webkit-scrollbar-thumb:hover {
-            background: #764ba2;
+            background: linear-gradient(to bottom, #b45309, #78350f);
+        }
+        
+        /* Badge voix africaine */
+        .african-badge {
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+            color: #451a03;
+            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 2px 8px rgba(217, 119, 6, 0.3);
+        }
+        
+        /* Indicateur de phrase */
+        .sentence-indicator {
+            position: absolute;
+            left: -20px;
+            width: 4px;
+            height: 100%;
+            background: #fbbf24;
+            border-radius: 2px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .sentence-active .sentence-indicator {
+            opacity: 1;
         }
     </style>
 </head>
 <body class="p-4 md:p-8">
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-5xl mx-auto">
         <!-- Header -->
         <div class="text-center mb-8 text-white">
-            <h1 class="text-4xl md:text-5xl font-bold mb-2 tracking-tight">Web Lecture Vocal</h1>
-            <p class="text-lg opacity-90">Par Sossou Kouamé Appolinaire</p>
+            <div class="flex justify-center items-center gap-3 mb-2">
+                <span class="african-badge">🇧🇯 🇨🇮 Voix Africaine</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold mb-2 tracking-tight drop-shadow-lg">Web Lecture Vocal</h1>
+            <p class="text-xl opacity-90 font-light">Par Sossou Kouamé Appolinaire</p>
+            <p class="text-sm mt-2 opacity-75">Version Africaine • Bénin • Côte d'Ivoire</p>
         </div>
 
         <!-- Main Panel -->
         <div class="glass-panel rounded-3xl shadow-2xl p-6 md:p-8 mb-6">
             
             <!-- File Upload Zone -->
-            <div id="dropZone" class="drop-zone rounded-2xl p-8 text-center mb-8 cursor-pointer bg-slate-50 hover:bg-slate-100">
+            <div id="dropZone" class="drop-zone rounded-2xl p-8 text-center mb-8 cursor-pointer">
                 <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt" class="hidden">
-                <svg class="w-16 h-16 mx-auto mb-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                </svg>
-                <p class="text-lg font-semibold text-slate-700 mb-2">Déposez votre fichier ici</p>
-                <p class="text-sm text-slate-500">PDF, Word (.doc, .docx) ou TXT</p>
-                <p id="fileName" class="mt-3 text-indigo-600 font-medium hidden"></p>
+                <div class="text-6xl mb-4">📚</div>
+                <p class="text-xl font-bold text-amber-900 mb-2">Déposez votre document ici</p>
+                <p class="text-amber-700">PDF, Word (.doc, .docx) ou TXT</p>
+                <p id="fileName" class="mt-3 text-amber-600 font-bold hidden"></p>
             </div>
 
-            <!-- Voice Selection -->
-            <div class="mb-8 bg-slate-50 rounded-2xl p-6">
+            <!-- Voice Selection Africaine -->
+            <div class="mb-8 bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 border-2 border-amber-200">
                 <div class="flex justify-between items-center mb-4">
-                    <label class="text-sm font-bold text-slate-700 uppercase tracking-wider">Type de Voix</label>
-                    <span id="voiceLabel" class="text-indigo-600 font-semibold">Femme Adulte</span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl">🎙️</span>
+                        <label class="text-sm font-bold text-amber-900 uppercase tracking-wider">Type de Voix Africaine</label>
+                    </div>
+                    <span id="voiceLabel" class="bg-amber-100 text-amber-800 px-4 py-2 rounded-full font-bold border-2 border-amber-300">
+                        Femme Béninoise
+                    </span>
                 </div>
                 
-                <div class="relative mb-2">
-                    <input type="range" id="voiceSlider" min="0" max="100" value="50" class="voice-slider w-full">
-                    <div class="flex justify-between text-xs text-slate-500 mt-2 font-medium">
-                        <span>👶 Enfant</span>
-                        <span>👦 Jeune H</span>
-                        <span>👩 Femme</span>
-                        <span>👨 Homme</span>
-                        <span>🧔 Senior</span>
+                <div class="relative mb-4">
+                    <input type="range" id="voiceSlider" min="0" max="100" value="30" class="voice-slider w-full">
+                    <div class="flex justify-between text-xs text-amber-800 mt-3 font-bold">
+                        <span class="flex flex-col items-center gap-1">
+                            <span class="text-2xl">👶</span>
+                            <span>Enfant</span>
+                        </span>
+                        <span class="flex flex-col items-center gap-1">
+                            <span class="text-2xl">🧑‍🦱</span>
+                            <span>Jeune</span>
+                        </span>
+                        <span class="flex flex-col items-center gap-1">
+                            <span class="text-2xl">👩‍🦱</span>
+                            <span>Femme</span>
+                        </span>
+                        <span class="flex flex-col items-center gap-1">
+                            <span class="text-2xl">👨‍🦱</span>
+                            <span>Homme</span>
+                        </span>
+                        <span class="flex flex-col items-center gap-1">
+                            <span class="text-2xl">🧔🏾</span>
+                            <span>Aîné</span>
+                        </span>
                     </div>
                 </div>
                 
-                <div class="flex items-center justify-between mt-4 pt-4 border-t border-slate-200">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 pt-4 border-t-2 border-amber-200">
                     <div class="flex items-center gap-2">
-                        <span class="text-sm text-slate-600">Langue:</span>
-                        <select id="langSelect" class="bg-white border border-slate-300 rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <option value="fr-FR">Français</option>
-                            <option value="en-US">English</option>
-                            <option value="es-ES">Español</option>
-                            <option value="de-DE">Deutsch</option>
+                        <span class="text-amber-700 font-semibold">Langue:</span>
+                        <select id="langSelect" class="bg-white border-2 border-amber-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium text-amber-900">
+                            <option value="fr-FR">🇫🇷 Français (Afrique)</option>
+                            <option value="en-US">🇬🇧 English</option>
                         </select>
                     </div>
+                    
                     <div class="flex items-center gap-2">
-                        <span class="text-sm text-slate-600">Vitesse:</span>
-                        <input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" class="w-24 accent-indigo-600">
-                        <span id="rateValue" class="text-sm font-mono text-indigo-600">1.0x</span>
+                        <span class="text-amber-700 font-semibold">Style:</span>
+                        <select id="styleSelect" class="bg-white border-2 border-amber-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium text-amber-900">
+                            <option value="warm">🌞 Chaleureux</option>
+                            <option value="formal">📜 Formel</option>
+                            <option value="joyful">😊 Joyeux</option>
+                            <option value="calm">🍃 Posé</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex items-center gap-2">
+                        <span class="text-amber-700 font-semibold">Vitesse:</span>
+                        <input type="range" id="rateSlider" min="0.5" max="1.5" step="0.1" value="0.9" class="w-24 accent-amber-600">
+                        <span id="rateValue" class="text-sm font-mono font-bold text-amber-700">0.9x</span>
                     </div>
                 </div>
             </div>
@@ -201,80 +294,106 @@
                     <div class="wave-bar"></div>
                     <div class="wave-bar"></div>
                     <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
                 </div>
             </div>
 
             <!-- Control Buttons -->
             <div class="flex justify-center gap-4 mb-6">
-                <button id="playBtn" class="control-btn bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full p-4 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed" disabled title="Lecture">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                <button id="playBtn" class="control-btn bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-full p-5 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed" disabled title="Lecture">
+                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M8 5v14l11-7z"/>
                     </svg>
                 </button>
                 
-                <button id="pauseBtn" class="control-btn bg-amber-500 text-white rounded-full p-4 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed hidden" title="Pause">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                <button id="pauseBtn" class="control-btn bg-gradient-to-r from-yellow-500 to-amber-600 text-white rounded-full p-5 shadow-xl hidden" title="Pause">
+                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
                     </svg>
                 </button>
                 
-                <button id="resumeBtn" class="control-btn bg-emerald-500 text-white rounded-full p-4 shadow-lg hover:shadow-xl hidden" title="Reprendre">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                <button id="resumeBtn" class="control-btn bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-full p-5 shadow-xl hidden" title="Reprendre">
+                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M8 5v14l11-7z"/>
                     </svg>
                 </button>
                 
-                <button id="stopBtn" class="control-btn bg-rose-500 text-white rounded-full p-4 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed" disabled title="Stop">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                <button id="stopBtn" class="control-btn bg-gradient-to-r from-red-500 to-rose-600 text-white rounded-full p-5 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed" disabled title="Stop">
+                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M6 6h12v12H6z"/>
                     </svg>
                 </button>
             </div>
 
             <!-- Progress -->
-            <div class="bg-slate-50 rounded-xl p-4">
-                <div class="flex justify-between text-sm text-slate-600 mb-2">
-                    <span>Progression</span>
+            <div class="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-4 border border-amber-200">
+                <div class="flex justify-between text-sm font-bold text-amber-800 mb-2">
+                    <span>Progression de lecture</span>
                     <span id="progressText">0%</span>
                 </div>
-                <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-                    <div id="progressBar" class="bg-gradient-to-r from-indigo-600 to-purple-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                <div class="w-full bg-amber-200 rounded-full h-3 overflow-hidden">
+                    <div id="progressBar" class="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 h-full rounded-full transition-all duration-300 shadow-lg" style="width: 0%"></div>
+                </div>
+                <div class="flex justify-between mt-2 text-xs text-amber-700">
+                    <span id="currentTime">00:00</span>
+                    <span id="totalTime">00:00</span>
                 </div>
             </div>
         </div>
 
-        <!-- Text Preview -->
-        <div class="glass-panel rounded-3xl shadow-xl p-6 md:p-8">
-            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-                Aperçu du Texte
-            </h3>
-            <div id="textPreview" class="bg-slate-50 rounded-xl p-4 h-64 overflow-y-auto text-slate-700 text-sm leading-relaxed font-mono whitespace-pre-wrap border border-slate-200">
-                Le texte extrait de votre document apparaîtra ici...
+        <!-- Text Preview avec Surlignage -->
+        <div class="glass-panel rounded-3xl shadow-2xl p-6 md:p-8 border-2 border-amber-200">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-amber-900 flex items-center gap-2">
+                    <span>📖</span>
+                    <span>Texte avec suivi en temps réel</span>
+                </h3>
+                <div class="flex gap-2 text-xs">
+                    <span class="bg-yellow-300 text-amber-900 px-2 py-1 rounded font-bold">En cours</span>
+                    <span class="bg-amber-100 text-amber-800 px-2 py-1 rounded">Lu</span>
+                </div>
+            </div>
+            
+            <div id="textContainer" class="relative bg-white rounded-xl p-6 h-96 overflow-y-auto text-amber-950 text-lg leading-loose border-2 border-amber-200 shadow-inner font-medium">
+                <div id="textPreview" class="whitespace-pre-wrap">
+                    <div class="text-center text-amber-400 mt-20">
+                        <div class="text-6xl mb-4">📥</div>
+                        <p>Importez un document pour commencer la lecture...</p>
+                        <p class="text-sm mt-2">Les mots seront surlignés en jaune pendant la lecture</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Info bulle -->
+            <div class="mt-4 flex items-center gap-2 text-sm text-amber-700 bg-amber-50 p-3 rounded-lg border border-amber-200">
+                <span>💡</span>
+                <span>Le mot en cours de lecture est surligné en <strong>jaune vif</strong> et les mots déjà lus apparaissent en <strong>orange clair</strong></span>
             </div>
         </div>
 
         <!-- Footer -->
-        <div class="text-center mt-8 text-white/80 text-sm">
-            <p>© 2024 Sossou Kouamé Appolinaire - Web Lecture Vocal</p>
+        <div class="text-center mt-8 text-white/90 text-sm">
+            <p class="text-lg font-semibold">© 2024 Sossou Kouamé Appolinaire</p>
+            <p class="mt-2 text-amber-200">🇧🇯 Bénin • 🇨🇮 Côte d'Ivoire • 🌍 Afrique de l'Ouest</p>
             <p class="mt-1 text-xs opacity-70">Déployé sur Render.com • Port 10000</p>
         </div>
     </div>
 
     <script>
-        // Configuration PDF.js
+        // Configuration
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
         
         // État global
         let currentText = '';
+        let words = [];
         let speechSynthesis = window.speechSynthesis;
         let currentUtterance = null;
         let isPaused = false;
         let isPlaying = false;
-        let textChunks = [];
-        let currentChunkIndex = 0;
+        let currentWordIndex = 0;
+        let wordElements = [];
+        let readWords = new Set();
 
         // Éléments DOM
         const dropZone = document.getElementById('dropZone');
@@ -284,6 +403,7 @@
         const voiceSlider = document.getElementById('voiceSlider');
         const voiceLabel = document.getElementById('voiceLabel');
         const langSelect = document.getElementById('langSelect');
+        const styleSelect = document.getElementById('styleSelect');
         const rateSlider = document.getElementById('rateSlider');
         const rateValue = document.getElementById('rateValue');
         const playBtn = document.getElementById('playBtn');
@@ -293,15 +413,26 @@
         const visualizer = document.getElementById('visualizer');
         const progressBar = document.getElementById('progressBar');
         const progressText = document.getElementById('progressText');
+        const currentTimeEl = document.getElementById('currentTime');
+        const totalTimeEl = document.getElementById('totalTime');
 
-        // Configuration des voix
-        const voiceTypes = [
-            { label: '👶 Enfant', pitch: 1.5, rate: 1.1 },
-            { label: '👦 Jeune Homme', pitch: 1.2, rate: 1.0 },
-            { label: '👩 Femme Adulte', pitch: 1.0, rate: 1.0 },
-            { label: '👨 Homme Adulte', pitch: 0.8, rate: 0.95 },
-            { label: '🧔 Senior', pitch: 0.6, rate: 0.9 }
+        // Configuration des voix africaines (simulation via pitch/rate)
+        const africanVoices = [
+            { label: '👶 Enfant Africain', pitch: 1.6, rate: 1.0, gender: 'child' },
+            { label: '🧑‍🦱 Jeune Béninois', pitch: 1.1, rate: 0.95, gender: 'young' },
+            { label: '👩‍🦱 Femme Béninoise', pitch: 1.0, rate: 0.9, gender: 'female' },
+            { label: '👩‍🦱 Femme Ivoirienne', pitch: 0.95, rate: 0.92, gender: 'female' },
+            { label: '👨‍🦱 Homme Ivoirien', pitch: 0.85, rate: 0.88, gender: 'male' },
+            { label: '🧔🏾 Aîné Africain', pitch: 0.7, rate: 0.8, gender: 'elder' }
         ];
+
+        // Styles de voix
+        const voiceStyles = {
+            warm: { rateMod: 1.0, pitchMod: 1.0 },
+            formal: { rateMod: 0.9, pitchMod: 1.0 },
+            joyful: { rateMod: 1.1, pitchMod: 1.1 },
+            calm: { rateMod: 0.85, pitchMod: 0.95 }
+        };
 
         // Événements
         dropZone.addEventListener('click', () => fileInput.click());
@@ -355,6 +486,7 @@
                     return;
                 }
                 
+                prepareTextForReading();
                 enableControls();
                 updateProgress(0);
             } catch (error) {
@@ -372,27 +504,20 @@
                 const page = await pdf.getPage(i);
                 const content = await page.getTextContent();
                 text += content.items.map(item => item.str).join(' ') + '\n';
-                updateProgress((i / pdf.numPages) * 50);
             }
             
             currentText = cleanText(text);
-            textPreview.textContent = currentText.substring(0, 5000) + (currentText.length > 5000 ? '...' : '');
-            updateProgress(100);
         }
 
         async function readWord(file) {
             const arrayBuffer = await file.arrayBuffer();
             const result = await mammoth.extractRawText({ arrayBuffer });
             currentText = cleanText(result.value);
-            textPreview.textContent = currentText.substring(0, 5000) + (currentText.length > 5000 ? '...' : '');
-            updateProgress(100);
         }
 
         async function readTXT(file) {
             const text = await file.text();
             currentText = cleanText(text);
-            textPreview.textContent = currentText.substring(0, 5000) + (currentText.length > 5000 ? '...' : '');
-            updateProgress(100);
         }
 
         function cleanText(text) {
@@ -402,47 +527,80 @@
                 .trim();
         }
 
-        // Synthèse vocale
+        // Préparation du texte avec span pour chaque mot
+        function prepareTextForReading() {
+            // Diviser le texte en mots tout en conservant la ponctuation
+            words = currentText.match(/[\wÀ-ÿ]+|[^\w\s]|\s+/g) || [];
+            
+            // Créer le HTML avec des spans pour chaque mot
+            let html = '';
+            wordElements = [];
+            
+            words.forEach((word, index) => {
+                if (word.match(/^\s+$/)) {
+                    html += word;
+                } else {
+                    const span = `<span class="word-span" data-index="${index}" id="word-${index}">${escapeHtml(word)}</span>`;
+                    html += span;
+                }
+            });
+            
+            textPreview.innerHTML = html;
+            
+            // Stocker les références aux éléments
+            words.forEach((_, index) => {
+                const el = document.getElementById(`word-${index}`);
+                if (el) wordElements[index] = el;
+            });
+            
+            // Calculer le temps estimé
+            const estimatedMinutes = Math.ceil(words.length / 130); // ~130 mots/minute
+            totalTimeEl.textContent = formatTime(estimatedMinutes * 60);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Configuration vocale
         function updateVoiceSettings() {
             const value = parseInt(voiceSlider.value);
-            const index = Math.floor((value / 100) * (voiceTypes.length - 1));
-            const voice = voiceTypes[index];
-            voiceLabel.textContent = voice.label.replace(/👶|👦|👩|👨|🧔 /, '');
+            const index = Math.floor((value / 100) * (africanVoices.length - 1));
+            const voice = africanVoices[index];
+            voiceLabel.textContent = voice.label.replace(/👶|🧑‍🦱|👩‍🦱|👨‍🦱|🧔🏾 /, '');
         }
 
         function getVoiceConfig() {
             const value = parseInt(voiceSlider.value);
-            const index = Math.floor((value / 100) * (voiceTypes.length - 1));
-            return voiceTypes[index];
+            const index = Math.floor((value / 100) * (africanVoices.length - 1));
+            const voice = africanVoices[index];
+            const style = voiceStyles[styleSelect.value];
+            
+            return {
+                ...voice,
+                pitch: voice.pitch * style.pitchMod,
+                rate: voice.rate * style.rateMod * parseFloat(rateSlider.value)
+            };
         }
 
-        function splitTextIntoChunks(text, maxLength = 200) {
-            const sentences = text.match(/[^\.!\?]+[\.!\?]+|[^\.!\?]+$/g) || [text];
-            const chunks = [];
-            let currentChunk = '';
-            
-            sentences.forEach(sentence => {
-                if ((currentChunk + sentence).length < maxLength) {
-                    currentChunk += sentence;
-                } else {
-                    if (currentChunk) chunks.push(currentChunk.trim());
-                    currentChunk = sentence;
-                }
-            });
-            
-            if (currentChunk) chunks.push(currentChunk.trim());
-            return chunks.filter(chunk => chunk.length > 0);
-        }
-
+        // Lecture avec suivi mot par mot
         function startReading() {
-            if (!currentText) return;
+            if (!currentText || words.length === 0) return;
             
             stopReading();
             isPlaying = true;
             isPaused = false;
+            currentWordIndex = 0;
+            readWords.clear();
             
-            textChunks = splitTextIntoChunks(currentText);
-            currentChunkIndex = 0;
+            // Réinitialiser les styles
+            wordElements.forEach(el => {
+                if (el) {
+                    el.classList.remove('word-current', 'word-read');
+                }
+            });
             
             playBtn.classList.add('hidden');
             pauseBtn.classList.remove('hidden');
@@ -451,37 +609,91 @@
             visualizer.classList.add('playing');
             visualizer.style.opacity = '1';
             
-            speakNextChunk();
+            speakWords();
         }
 
-        function speakNextChunk() {
-            if (currentChunkIndex >= textChunks.length || !isPlaying) {
-                if (currentChunkIndex >= textChunks.length) {
+        function speakWords() {
+            if (!isPlaying || currentWordIndex >= words.length) {
+                if (currentWordIndex >= words.length) {
                     stopReading();
                 }
                 return;
             }
             
-            const chunk = textChunks[currentChunkIndex];
+            // Regrouper les mots par phrases pour une lecture naturelle
+            const chunkSize = 8;
+            const chunk = words.slice(currentWordIndex, currentWordIndex + chunkSize).join('');
+            const actualWords = words.slice(currentWordIndex, currentWordIndex + chunkSize);
+            
             const utterance = new SpeechSynthesisUtterance(chunk);
             const voiceConfig = getVoiceConfig();
             
             utterance.lang = langSelect.value;
             utterance.pitch = voiceConfig.pitch;
-            utterance.rate = parseFloat(rateSlider.value) * voiceConfig.rate;
+            utterance.rate = voiceConfig.rate;
             
-            // Sélection de la voix
+            // Sélectionner une voix française chaude
             const voices = speechSynthesis.getVoices();
-            const langPrefix = langSelect.value.split('-')[0];
-            const appropriateVoice = voices.find(v => v.lang.startsWith(langSelect.value)) || 
-                                    voices.find(v => v.lang.startsWith(langPrefix));
-            if (appropriateVoice) utterance.voice = appropriateVoice;
+            const preferredVoice = voices.find(v => 
+                v.lang.includes('fr') && 
+                (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Enhanced'))
+            ) || voices.find(v => v.lang.includes('fr')) || voices[0];
+            
+            if (preferredVoice) utterance.voice = preferredVoice;
+            
+            // Calculer la durée estimée pour chaque mot
+            const wordDuration = (chunk.length / voiceConfig.rate) * 80; // ms par caractère approximatif
+            
+            // Animer les mots pendant la lecture
+            let wordStartTime = 0;
+            const wordTimers = [];
+            
+            actualWords.forEach((word, idx) => {
+                if (!word.match(/^\s+$/)) {
+                    const timer = setTimeout(() => {
+                        if (!isPlaying) return;
+                        
+                        const globalIndex = currentWordIndex + idx;
+                        
+                        // Retirer le surlignage précédent
+                        if (globalIndex > 0 && wordElements[globalIndex - 1]) {
+                            wordElements[globalIndex - 1].classList.remove('word-current');
+                            wordElements[globalIndex - 1].classList.add('word-read');
+                        }
+                        
+                        // Surligner le mot actuel
+                        if (wordElements[globalIndex]) {
+                            wordElements[globalIndex].classList.add('word-current');
+                            wordElements[globalIndex].scrollIntoView({ 
+                                behavior: 'smooth', 
+                                block: 'center' 
+                            });
+                        }
+                        
+                        // Mettre à jour la progression
+                        updateProgress((globalIndex / words.length) * 100);
+                        
+                    }, wordStartTime);
+                    
+                    wordTimers.push(timer);
+                }
+                wordStartTime += (word.length + 1) * wordDuration;
+            });
             
             utterance.onend = () => {
-                currentChunkIndex++;
-                updateProgress((currentChunkIndex / textChunks.length) * 100);
+                wordTimers.forEach(t => clearTimeout(t));
+                currentWordIndex += chunkSize;
+                
+                // Marquer les mots lus
+                for (let i = currentWordIndex - chunkSize; i < currentWordIndex && i < words.length; i++) {
+                    if (wordElements[i]) {
+                        wordElements[i].classList.remove('word-current');
+                        wordElements[i].classList.add('word-read');
+                    }
+                }
+                
                 if (isPlaying && !isPaused) {
-                    speakNextChunk();
+                    speakWords();
                 }
             };
             
@@ -489,21 +701,36 @@
                 if (e.error !== 'canceled' && e.error !== 'interrupted') {
                     console.error('Speech error:', e);
                 }
+                wordTimers.forEach(t => clearTimeout(t));
             };
             
             currentUtterance = utterance;
             speechSynthesis.speak(utterance);
             
-            // Highlight du texte en cours (optionnel)
-            highlightCurrentText(chunk);
+            // Mettre à jour le temps
+            updateTime();
         }
 
-        function highlightCurrentText(chunk) {
-            const preview = textPreview.textContent;
-            const index = preview.indexOf(chunk);
-            if (index !== -1) {
-                textPreview.scrollTop = textPreview.scrollHeight * (currentChunkIndex / textChunks.length);
+        function updateTime() {
+            if (!isPlaying) return;
+            
+            const elapsed = Math.floor((currentWordIndex / words.length) * parseTime(totalTimeEl.textContent));
+            currentTimeEl.textContent = formatTime(elapsed);
+            
+            if (isPlaying) {
+                setTimeout(updateTime, 1000);
             }
+        }
+
+        function parseTime(timeStr) {
+            const [min, sec] = timeStr.split(':').map(Number);
+            return min * 60 + sec;
+        }
+
+        function formatTime(seconds) {
+            const min = Math.floor(seconds / 60);
+            const sec = seconds % 60;
+            return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
         }
 
         function pauseReading() {
@@ -525,6 +752,7 @@
                 pauseBtn.classList.remove('hidden');
                 visualizer.classList.remove('paused');
                 visualizer.classList.add('playing');
+                updateTime();
             }
         }
 
@@ -532,7 +760,7 @@
             speechSynthesis.cancel();
             isPlaying = false;
             isPaused = false;
-            currentChunkIndex = 0;
+            currentWordIndex = 0;
             
             playBtn.classList.remove('hidden');
             pauseBtn.classList.add('hidden');
@@ -541,7 +769,15 @@
             visualizer.classList.remove('playing');
             visualizer.style.opacity = '0.3';
             
+            // Réinitialiser les surlignages
+            wordElements.forEach(el => {
+                if (el) {
+                    el.classList.remove('word-current', 'word-read');
+                }
+            });
+            
             updateProgress(0);
+            currentTimeEl.textContent = '00:00';
         }
 
         function enableControls() {
@@ -554,19 +790,18 @@
             progressText.textContent = Math.round(percent) + '%';
         }
 
-        // Initialisation des voix
+        // Initialisation
         if (speechSynthesis.onvoiceschanged !== undefined) {
             speechSynthesis.onvoiceschanged = () => {
                 speechSynthesis.getVoices();
             };
         }
         
-        // Charger les voix au démarrage
         speechSynthesis.getVoices();
+        updateVoiceSettings();
         
-        // Message de bienvenue
-        console.log('🎤 Web Lecture Vocal - Sossou Kouamé Appolinaire');
-        console.log('📖 Prêt à lire vos documents');
+        console.log('🎤 Web Lecture Vocal Africain - Sossou Kouamé Appolinaire');
+        console.log('🇧🇯 🇨🇮 Prêt avec voix chaleureuses d\'Afrique de l\'Ouest');
     </script>
 </body>
 </html>
